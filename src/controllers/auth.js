@@ -13,6 +13,7 @@ export const register = async (req, res) => {
     return internalServerError(res);
   }
 };
+
 export const login = async (req, res) => {
   try {
     const { error } = joi.object({ email, password }).validate(req.body);
