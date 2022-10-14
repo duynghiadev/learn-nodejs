@@ -6,7 +6,7 @@ export const getOne = (userId) =>
       const response = await db.User.findOne({
         where: { id: userId },
         attributes: {
-          exclude: ["password", "role_code"],
+          exclude: ["password", "role_code", "refresh_token"],
         },
         include: [
           {
@@ -18,7 +18,7 @@ export const getOne = (userId) =>
       });
       resolve({
         err: response ? 0 : 1,
-        mes: response ? "Got" : "User Not Found",
+        mes: response ? "Got" : "User not found",
         userData: response,
       });
     } catch (error) {
