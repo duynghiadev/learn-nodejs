@@ -16,6 +16,7 @@ export const register = ({ email, password }) =>
           password: hashPassword(password),
         },
       });
+
       const accessToken = response[1]
         ? jwt.sign(
             {
@@ -27,6 +28,7 @@ export const register = ({ email, password }) =>
             { expiresIn: "5s" }
           )
         : null;
+
       // JWT_SECRET_REFRESH_TOKEN
       const refreshToken = response[1]
         ? jwt.sign(
@@ -41,6 +43,7 @@ export const register = ({ email, password }) =>
         access_token: accessToken ? `Bearer ${accessToken}` : accessToken,
         refresh_token: refreshToken,
       });
+
       if (refreshToken) {
         await db.User.update(
           {
@@ -55,6 +58,7 @@ export const register = ({ email, password }) =>
       reject(error);
     }
   });
+
 export const login = ({ email, password }) =>
   new Promise(async (resolve, reject) => {
     try {
@@ -62,6 +66,7 @@ export const login = ({ email, password }) =>
         where: { email },
         raw: true,
       });
+
       const isChecked =
         response && bcrypt.compareSync(password, response.password);
       const accessToken = isChecked
@@ -75,6 +80,7 @@ export const login = ({ email, password }) =>
             { expiresIn: "5s" }
           )
         : null;
+
       // JWT_SECRET_REFRESH_TOKEN
       const refreshToken = isChecked
         ? jwt.sign({ id: response.id }, process.env.JWT_SECRET_REFRESH_TOKEN, {
@@ -91,6 +97,7 @@ export const login = ({ email, password }) =>
         access_token: accessToken ? `Bearer ${accessToken}` : accessToken,
         refresh_token: refreshToken,
       });
+
       if (refreshToken) {
         await db.User.update(
           {
@@ -105,6 +112,7 @@ export const login = ({ email, password }) =>
       reject(error);
     }
   });
+
 export const refreshToken = (refresh_token) =>
   new Promise(async (resolve, reject) => {
     try {
