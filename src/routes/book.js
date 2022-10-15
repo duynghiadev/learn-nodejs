@@ -12,8 +12,11 @@ router.get("/", controllers.getBooks);
 // PRIVATE ROUTES
 router.use(verifyToken);
 router.use(isCreatorOrAdmin);
+
 router.post("/", uploadCloud.single("image"), controllers.createNewBook);
+
 router.put("/", uploadCloud.single("image"), controllers.updateBook);
+
 router.delete("/", controllers.deleteBook);
 
 module.exports = router;

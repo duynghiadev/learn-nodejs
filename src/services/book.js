@@ -10,11 +10,14 @@ export const getBooks = ({ page, limit, order, name, available, ...query }) =>
       const queries = { raw: true, nest: true };
       const offset = !page || +page <= 1 ? 0 : +page - 1;
       const fLimit = +limit || +process.env.LIMIT_BOOK;
+
       queries.offset = offset * fLimit;
       queries.limit = fLimit;
+
       if (order) queries.order = [order];
       if (name) query.title = { [Op.substring]: name };
       if (available) query.available = { [Op.between]: available };
+
       const response = await db.Book.findAndCountAll({
         where: query,
         ...queries,
@@ -38,6 +41,7 @@ export const getBooks = ({ page, limit, order, name, available, ...query }) =>
       reject(error);
     }
   });
+
 // CREATE
 export const createNewBook = (body, fileData) =>
   new Promise(async (resolve, reject) => {
@@ -62,6 +66,7 @@ export const createNewBook = (body, fileData) =>
       if (fileData) cloudinary.uploader.destroy(fileData.filename);
     }
   });
+
 // UPDATE
 export const updateBook = ({ bid, ...body }, fileData) =>
   new Promise(async (resolve, reject) => {
@@ -84,6 +89,7 @@ export const updateBook = ({ bid, ...body }, fileData) =>
       if (fileData) cloudinary.uploader.destroy(fileData.filename);
     }
   });
+
 // DELETE
 // [id1, id2]
 
@@ -93,6 +99,7 @@ params = {
     filename=[filename1, filename2]
 }
 */
+
 export const deleteBook = (bids, filename) =>
   new Promise(async (resolve, reject) => {
     try {
